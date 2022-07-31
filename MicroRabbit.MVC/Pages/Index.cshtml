@@ -8,3 +8,14 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+<form action="/home/transfer" method="post">
+    <label for="FromAccount">Origin Account : </label>
+    <input type="text" name="FromAccount"/>
+    <label for="ToAccount">Destination Account : </label>
+    <input type="text" name="ToAccount"/>
+    <label for="TransferAmount">Amount : </label>
+    <input type="text" name="TransferAmount"/>
+    <input type="submit" name="Transfer"/>
+</form>
