@@ -1,7 +1,13 @@
+using MicroRabbit.MVC.Services;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+builder.Services.AddHttpClient<ITransferService, TransferService>();
 
 var app = builder.Build();
 
