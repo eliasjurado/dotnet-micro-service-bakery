@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="EventHandlers\" />
+    <Folder Include="CommandHandlers\" />
+    <Folder Include="Events\" />
+    <Folder Include="Commands\" />
+  </ItemGroup>
+
 </Project>
