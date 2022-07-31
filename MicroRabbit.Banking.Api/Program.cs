@@ -43,5 +43,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UsePathBase(new PathString("/api"));
+app.UseRouting();
 
 app.Run();
