@@ -1,20 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MicroRabbit.MVC.Models;
+using MicroRabbit.MVC.Models.Dto;
+using MicroRabbit.MVC.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MicroRabbit.MVC.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
+        private readonly ITransferService _transferService;
+        public IEnumerable<TransferLogViewModel>? TransferLogs { get; set; }
+        public IndexModel(ITransferService transferService)
         {
-            _logger = logger;
+            _transferService = transferService;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
+            TransferLogs = await _transferService.GetTransfer();
 
+        }
+        public async Task<IActionResult> OnPost(TransferDto transferDto)
+        {
+            await _transferService.Transfer(transferDto);
+            return RedirectToPage("Index");
         }
     }
 }

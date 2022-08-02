@@ -1,21 +1,61 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Banking Client";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Banking Client</h1>
+    <p>Transfers</p>
 </div>
+<div class="container p-3">
+    <form method="post">
+        <div class="border p-3 mt-4">
+            <div class="row pb-2">
+                <h3>Create Transfer</h3>
+            </div>
+             <div class="mb-3">
+                <label for="FromAccount" style="width:25%">Origin Account : </label>
+                <input type="text" name="FromAccount"/>
+            </div>
+            <div class="mb-3">
+                <label for="ToAccount" style="width:25%">Destination Account : </label>
+                <input type="text" name="ToAccount"/>
+            </div>
+            <div class="mb-3">
+                <label for="TransferAmount" style="width:25%">Amount : </label>
+                <input type="text" name="TransferAmount"/>
+            </div>
+            <input type="submit" name="Transfer" class="btn btn-primary" style="width: 150px;" value="Create"/>
+        </div>
+       
+    </form>
 
-
-<form method="post">
-    <label for="FromAccount">Origin Account : </label>
-    <input type="text" name="FromAccount"/>
-    <label for="ToAccount">Destination Account : </label>
-    <input type="text" name="ToAccount"/>
-    <label for="TransferAmount">Amount : </label>
-    <input type="text" name="TransferAmount"/>
-    <input type="submit"/>
-</form>
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h3>Transfer Log</h3>
+        </div>
+         <table class="table table-bordered table-striped" style="width:100%">
+            <thead class="fw-bold">
+                <tr>
+                    <td width="25%">Id Transfer</td>
+                    <td width="25%">From Account</td>   
+                    <td width="25%">To Account</td>   
+                    <td width="25%">Transfer Amount</td>   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var obj in Model.TransferLogs)
+                {
+                    <tr>
+                        <td>@obj.Id</td>
+                        <td>@obj.FromAccount</td>   
+                        <td>@obj.ToAccount</td>   
+                        <td>@obj.TransferAmount</td>  
+                    </tr> 
+                }
+            </tbody>
+        </table>
+    </div>
+   
+</div>
