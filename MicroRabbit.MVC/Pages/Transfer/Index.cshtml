@@ -1,0 +1,42 @@
+﻿@page
+@model MicroRabbit.MVC.Pages.Transfer.IndexModel
+@{
+}
+<div class="text-center">
+    <h1 class="display-4">Banking Client</h1>
+    <p>Transfers</p>
+</div>
+
+
+<form method="post">
+    <label for="FromAccount">Origin Account : </label>
+    <input type="text" name="FromAccount"/>
+    <label for="ToAccount">Destination Account : </label>
+    <input type="text" name="ToAccount"/>
+    <label for="TransferAmount">Amount : </label>
+    <input type="text" name="TransferAmount"/>
+    <input type="submit" name="Transfer"/>
+</form>
+
+<br />
+<table>
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>From</td>   
+            <td>To</td>   
+            <td>Amount</td>   
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model.TransferLogs)
+        {
+            <tr>
+                <td>@obj.Id</td>
+                <td>@obj.FromAccount</td>   
+                <td>@obj.ToAccount</td>   
+                <td>@obj.TransferAmount</td>  
+            </tr> 
+        }
+    </tbody>
+</table>
