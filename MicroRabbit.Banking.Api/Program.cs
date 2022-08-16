@@ -8,12 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-
+DependencyContainer.RegisterServices(builder.Services);
 var connectionString = builder.Configuration.GetConnectionString("BankingDbConnection");
-builder.Services.AddDbContext<BankingDbContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-});
+builder.Services.AddDbContext<BankingDbContext>(options => options.UseSqlServer(connectionString));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -24,7 +21,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddMediatR(typeof(StartupBase));
 
-DependencyContainer.RegisterServices(builder.Services);
+
 
 var app = builder.Build();
 

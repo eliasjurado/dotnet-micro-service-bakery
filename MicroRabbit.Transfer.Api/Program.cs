@@ -10,13 +10,11 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+DependencyContainer.RegisterServices(builder.Services);
 var connectionString = builder.Configuration.GetConnectionString("TransferDbConnection");
-builder.Services.AddDbContext<TransferDbContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-});
+builder.Services.AddDbContext<TransferDbContext>(options => options.UseSqlServer(connectionString));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -24,7 +22,6 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Transfer Microservice", Version = "v1" });
 });
 builder.Services.AddMediatR(typeof(StartupBase));
-DependencyContainer.RegisterServices(builder.Services);
 
 var app = builder.Build();
 

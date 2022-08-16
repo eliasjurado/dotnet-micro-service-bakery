@@ -1,4 +1,5 @@
-﻿using MicroRabbit.Banking.Domain.Models;
+﻿using FluentAssertions.Common;
+using MicroRabbit.Banking.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MicroRabbit.Banking.Data.Context
@@ -16,7 +17,7 @@ namespace MicroRabbit.Banking.Data.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=PE-IT001549;Database=BankingDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(Configuration.Current.ToString());
             }
         }
         public DbSet<Account> Accounts { get; set; }

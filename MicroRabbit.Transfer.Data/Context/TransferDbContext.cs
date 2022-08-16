@@ -1,4 +1,5 @@
-﻿using MicroRabbit.Transfer.Domain.Models;
+﻿using FluentAssertions.Common;
+using MicroRabbit.Transfer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MicroRabbit.Transfer.Data.Context
@@ -15,7 +16,7 @@ namespace MicroRabbit.Transfer.Data.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=PE-IT001549;Database=TransferDB;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(Configuration.Current.ToString());
             }
         }
         public DbSet<TransferLog> TransferLogs { get; set; }
