@@ -9,7 +9,7 @@ namespace MicroRabbit.Banking.Data.Context
         public BankingDbContext()
         {
         }
-        public BankingDbContext(DbContextOptions options) : base(options)
+        public BankingDbContext(DbContextOptions<BankingDbContext> options) : base(options)
         {
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
