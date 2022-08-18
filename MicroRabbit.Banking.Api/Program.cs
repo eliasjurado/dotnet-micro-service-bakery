@@ -9,14 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 DependencyContainer.RegisterServices(builder.Services);
-var connectionString = builder.Configuration.GetConnectionString("BankingDbConnection");
-builder.Services.AddDbContext<BankingDbContext>(options => options.UseSqlServer(connectionString));
+var connectionString = builder.Configuration.GetConnectionString("BakeryDBConnection");
+builder.Services.AddDbContext<BakeryDbContext>(options => options.UseSqlServer(connectionString));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Banking Microservice", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BakeryInventory Microservice", Version = "v1" });
 });
 
 builder.Services.AddMediatR(typeof(StartupBase));
@@ -31,7 +31,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(action =>
     {
-        action.SwaggerEndpoint("/swagger/v1/swagger.json", "Banking Microservice V1");
+        action.SwaggerEndpoint("/swagger/v1/swagger.json", "BakeryInventory Microservice V1");
     });
 }
 
