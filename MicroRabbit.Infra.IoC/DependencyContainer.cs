@@ -48,6 +48,11 @@ namespace MicroRabbit.Infra.IoC
             services.AddTransient<ITransferRepository, TransferRepository>();
             services.AddTransient<BankingDbContext>();
             services.AddTransient<TransferDbContext>();
+
+            //Bakery
+            services.AddTransient<IBakeryInventoryService, BakeryinventoryService>();
+            services.AddTransient<IBakeryRepository, BakeryRepository>();
+            services.AddTransient<BakeryDbContext>();
         }
     }
 }
