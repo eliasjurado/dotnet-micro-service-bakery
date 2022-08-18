@@ -3,12 +3,15 @@ using MicroRabbit.Banking.Data.Context;
 using MicroRabbit.Banking.Data.Repository;
 using MicroRabbit.Banking.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace MicroRabbit.Bakery.Data.Test
 {
     public class BakeryDataTest
     {
+        private readonly IOptions<ProductSetting> _appSettings;
+
         [Theory]
         [AvailableButterStockData]
         public void AvailableButterStock_IsEnoughButter(Product data, float value, bool expected)
@@ -21,7 +24,7 @@ namespace MicroRabbit.Bakery.Data.Test
                 mockContext.Product.Add(data);
             }
             mockContext.SaveChanges();
-            var mockRepository = new BakeryRepository(mockContext);
+            var mockRepository = new BakeryRepository(mockContext, _appSettings);
 
             var result = mockRepository.AvailableButterStock(value);
 
@@ -40,11 +43,12 @@ namespace MicroRabbit.Bakery.Data.Test
                 mockContext.Product.Add(data);
             }
             mockContext.SaveChanges();
-            var mockRepository = new BakeryRepository(mockContext);
+            var mockRepository = new BakeryRepository(mockContext, _appSettings);
 
             var result = mockRepository.AvailableFlourStock(value);
 
             Assert.Equal(expected, result);
         }
+
     }
 }
