@@ -4,6 +4,6 @@ namespace MicroRabbit.Banking.Application.Interfaces
 {
     public interface IBakeryInventoryService
     {
-        Task<BakeryResponse> RegisterBreadProductionAsync(int quantity, DateTime expirationDate, CancellationToken cancellationToken);
+        Task<BakeryResponse> RegisterBreadProductionAsync(float quantity, DateTime expirationDate, CancellationToken cancellationToken);
     }
 }

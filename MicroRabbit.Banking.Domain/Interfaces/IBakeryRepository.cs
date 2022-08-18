@@ -2,9 +2,9 @@
 {
     public interface IBakeryRepository
     {
-        bool AvailableButterStock(int quantity);
-        bool AvailableFlourStock(int quantity);
-        Task ConsumingInventoryAsync(int projectedFlour, int projectedButter, CancellationToken cancellationToken);
-        Task RegisterProductionAsync(int amount, DateTime expirationDate, CancellationToken cancellationToken);
+        bool AvailableButterStock(float quantity);
+        bool AvailableFlourStock(float quantity);
+        Task ConsumingInventoryAsync(float projectedFlour, float projectedButter, CancellationToken cancellationToken);
+        Task RegisterProductionAsync(float amount, DateTime expirationDate, CancellationToken cancellationToken);
     }
 }

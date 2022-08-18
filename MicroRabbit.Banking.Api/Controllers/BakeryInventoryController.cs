@@ -15,7 +15,7 @@ namespace MicroRabbit.Banking.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterBreadProduction(int quantity, DateTime expirationDate, CancellationToken cancellationToken)
+        public async Task<IActionResult> RegisterBreadProduction(float quantity, DateTime expirationDate, CancellationToken cancellationToken)
         {
             BakeryResponse result = null;
             try

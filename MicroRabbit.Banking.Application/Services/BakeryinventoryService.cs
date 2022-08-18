@@ -16,21 +16,28 @@ namespace MicroRabbit.Banking.Application.Services
             _bakeryRepository = bakeryRepository ?? throw new ArgumentNullException(nameof(bakeryRepository));
         }
 
-        public async Task<BakeryResponse> RegisterBreadProductionAsync(int quantity, DateTime expirationDate, CancellationToken cancellationToken)
+        public async Task<BakeryResponse> RegisterBreadProductionAsync(float quantity, DateTime expirationDate, CancellationToken cancellationToken)
         {
-            var projectedFlour = (quantity * _requiredFlour) / _breadsPerDay;
-            var projectedButter = (quantity * _requiredButter) / _breadsPerDay;
+            try
+            {
+                float projectedFlour = (quantity * _requiredFlour) / _breadsPerDay;
+                float projectedButter = (quantity * _requiredButter) / _breadsPerDay;
 
-            if (!_bakeryRepository.AvailableFlourStock(projectedFlour))
-                throw new Exception("No available flour stock");
+                if (!_bakeryRepository.AvailableFlourStock(projectedFlour))
+                    throw new Exception("No available flour stock");
 
-            if (!_bakeryRepository.AvailableButterStock(projectedButter))
-                throw new Exception("No available butter stock");
+                if (!_bakeryRepository.AvailableButterStock(projectedButter))
+                    throw new Exception("No available butter stock");
 
-            await _bakeryRepository.ConsumingInventoryAsync(projectedFlour, projectedButter, cancellationToken);
-            await _bakeryRepository.RegisterProductionAsync(quantity, expirationDate, cancellationToken);
-
-            return new BakeryResponse { Message = "Process was sucessful" };
+                await _bakeryRepository.ConsumingInventoryAsync(projectedFlour, projectedButter, cancellationToken);
+                await _bakeryRepository.RegisterProductionAsync(quantity, expirationDate, cancellationToken);
+                ////ADD MESSAGE TO RABBITMQ
+                return new BakeryResponse { Message = "Process was sucessful" };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error registering bread production", ex);
+            }
         }
     }
 }

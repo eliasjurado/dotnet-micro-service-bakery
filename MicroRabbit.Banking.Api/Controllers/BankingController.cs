@@ -8,6 +8,7 @@ namespace MicroRabbit.Banking.Api.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BankingController : ControllerBase
     {
         private readonly IAccountService _accountService;
