@@ -1,31 +1,22 @@
-﻿using MicroRabbit.Banking.Api.Controllers;
-using MicroRabbit.Banking.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using Calculations.Test;
+using MicroRabbit.Bakery.Api.Test.Fixtures;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System.Text;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace PersonalPhotos.Test
 {
-    public class BakeryApiTests
+    public class BakeryApiTests : IClassFixture<BakeryApiFixture>
     {
-        [Fact]
-        public async Task RegisterBreadProduction_100BreadsAndExpiresTheDayAfterTomorrow()
+        public readonly ITestOutputHelper _testOutputHelper;
+        public readonly BakeryApiFixture _bakeryApiFixture;
+
+        [Theory]
+        [RegisterBreadProductionData]
+        public async Task RegisterBreadProduction_100BreadsAndExpiresTheDayAfterTomorrow(float quantity, DateTime expirationDate)
         {
-            var session = Mock.Of<ISession>();
-            session.Set("User", Encoding.UTF8.GetBytes("admin@bakery.com"));
-            var context = Mock.Of<HttpContext>(x => x.Session == session);
-            var accessor = Mock.Of<IHttpContextAccessor>(x => x.HttpContext == context);
-
-
-            var bakeryInventoryService = Mock.Of<IBakeryInventoryService>();
-            var controller = new BakeryInventoryController(bakeryInventoryService);
-
-            float quantity = 100f;
-            DateTime expirationDate = DateTime.Parse("2022-08-20");
+            var controller = _bakeryApiFixture.bakeryInventorySingleton;
             var cancellationToken = new CancellationTokenSource(1000);
-
             var result = await controller.RegisterBreadProduction(quantity, expirationDate, cancellationToken.Token) as RedirectToActionResult;
 
             Assert.Equal("Display", result.ActionName, ignoreCase: true);
