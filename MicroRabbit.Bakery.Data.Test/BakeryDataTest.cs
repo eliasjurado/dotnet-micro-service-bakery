@@ -27,5 +27,24 @@ namespace MicroRabbit.Bakery.Data.Test
 
             Assert.Equal(expected, result);
         }
+
+        [Theory]
+        [AvailableFlourStockData]
+        public void AvailableFlourStock_IsEnoughFlour(Product data, float value, bool expected)
+        {
+            var mockOptions = new DbContextOptionsBuilder<BakeryDbContext>().UseInMemoryDatabase(databaseName: "BakeryDB").Options;
+            var mockContext = new BakeryDbContext(mockOptions);
+            var exists = mockContext.Product.Find(data.Id);
+            if (exists == null)
+            {
+                mockContext.Product.Add(data);
+            }
+            mockContext.SaveChanges();
+            var mockRepository = new BakeryRepository(mockContext);
+
+            var result = mockRepository.AvailableFlourStock(value);
+
+            Assert.Equal(expected, result);
+        }
     }
 }
