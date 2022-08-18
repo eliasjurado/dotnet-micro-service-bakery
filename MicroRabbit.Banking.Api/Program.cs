@@ -1,5 +1,6 @@
 using MediatR;
 using MicroRabbit.Banking.Data.Context;
+using MicroRabbit.Banking.Domain.Models;
 using MicroRabbit.Infra.IoC;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -21,7 +22,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddMediatR(typeof(StartupBase));
 
-
+builder.Services.Configure<ProductSetting>(builder.Configuration.GetSection("ProductSetting"));
 
 var app = builder.Build();
 
