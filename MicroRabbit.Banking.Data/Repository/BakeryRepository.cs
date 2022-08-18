@@ -1,19 +1,27 @@
 ﻿using MicroRabbit.Banking.Data.Context;
 using MicroRabbit.Banking.Domain.Interfaces;
 using MicroRabbit.Banking.Domain.Models;
+using Microsoft.Extensions.Options;
 
 namespace MicroRabbit.Banking.Data.Repository
 {
     public class BakeryRepository : IBakeryRepository
     {
         private BakeryDbContext _ctx;
-        private const int _idButter = 3;
-        private const int _idFluor = 2;
-        private const int _idBread = 1;
+        private int _idButter = 3;
+        private int _idFluor = 2;
+        private int _idBread = 1;
 
-        public BakeryRepository(BakeryDbContext ctx)
+        private readonly IOptions<ProductSetting> _appSettings;
+
+        public BakeryRepository(BakeryDbContext ctx, IOptions<ProductSetting> appSettings)
         {
             _ctx = ctx ?? throw new ArgumentNullException(nameof(ctx));
+            _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+
+            _idBread = _appSettings.Value.BreadId;
+            _idButter = _appSettings.Value.ButterId;
+            _idFluor = _appSettings.Value.FlourId;
         }
 
         public bool AvailableButterStock(float quantity)
@@ -32,13 +40,25 @@ namespace MicroRabbit.Banking.Data.Repository
         {
             try
             {
-                var product = _ctx.Product.Find(_idFluor);
-                product.Stock -= (int)Math.Ceiling(projectedFlour);
-                await _ctx.SaveChangesAsync(cancellationToken);
+                using var transaction = _ctx.Database.BeginTransaction();
 
-                product = _ctx.Product.Find(_idButter);
-                product.Stock -= (int)Math.Ceiling(projectedButter);
-                await _ctx.SaveChangesAsync(cancellationToken);
+                try
+                {
+                    var product = _ctx.Product.Find(_idFluor);
+                    product.Stock -= (int)Math.Ceiling(projectedFlour);
+                    await _ctx.SaveChangesAsync(cancellationToken);
+
+                    product = _ctx.Product.Find(_idButter);
+                    product.Stock -= (int)Math.Ceiling(projectedButter);
+                    await _ctx.SaveChangesAsync(cancellationToken);
+
+                    await transaction.CommitAsync(cancellationToken);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
             }
             catch (Exception ex)
             {
@@ -53,7 +73,9 @@ namespace MicroRabbit.Banking.Data.Repository
                 var processedProduct = new Processed_Product
                 {
                     Amount = (int)amount,
-                    Expiration_Date = expirationDate
+                    Expiration_Date = expirationDate,
+                    Id_Product = 1,
+                    Production_Date = DateTime.Now
                 };
                 await _ctx.Processed_Product.AddAsync(processedProduct, cancellationToken);
 
