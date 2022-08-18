@@ -16,7 +16,7 @@ namespace MicroRabbit.Banking.Data.Context
                 optionsBuilder.UseSqlServer(Configuration.Current.ToString());
             }
         }
-        public DbSet<Product> Products { set; get; }
-        public DbSet<Processed_Product> ProcessedProduct { set; get; }
+        public DbSet<Product> Product { set; get; }
+        public DbSet<Processed_Product> Processed_Product { set; get; }
     }
 }

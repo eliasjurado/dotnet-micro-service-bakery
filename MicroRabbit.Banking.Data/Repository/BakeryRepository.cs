@@ -18,26 +18,26 @@ namespace MicroRabbit.Banking.Data.Repository
 
         public bool AvailableButterStock(float quantity)
         {
-            var product = _ctx.Products.Find(_idButter);
-            return product.Stock <= quantity;
+            var product = _ctx.Product.Find(_idButter);
+            return product.Stock > (int)Math.Ceiling(quantity);
         }
 
         public bool AvailableFlourStock(float quantity)
         {
-            var product = _ctx.Products.Find(_idFluor);
-            return product.Stock <= quantity;
+            var product = _ctx.Product.Find(_idFluor);
+            return product.Stock > (int)Math.Ceiling(quantity);
         }
 
         public async Task ConsumingInventoryAsync(float projectedFlour, float projectedButter, CancellationToken cancellationToken)
         {
             try
             {
-                var product = _ctx.Products.Find(_idFluor);
-                product.Stock -= (int)projectedFlour;
+                var product = _ctx.Product.Find(_idFluor);
+                product.Stock -= (int)Math.Ceiling(projectedFlour);
                 await _ctx.SaveChangesAsync(cancellationToken);
 
-                product = _ctx.Products.Find(_idButter);
-                product.Stock -= (int)projectedButter;
+                product = _ctx.Product.Find(_idButter);
+                product.Stock -= (int)Math.Ceiling(projectedButter);
                 await _ctx.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
@@ -55,9 +55,9 @@ namespace MicroRabbit.Banking.Data.Repository
                     Amount = (int)amount,
                     Expiration_Date = expirationDate
                 };
-                await _ctx.ProcessedProduct.AddAsync(processedProduct, cancellationToken);
+                await _ctx.Processed_Product.AddAsync(processedProduct, cancellationToken);
 
-                var product = _ctx.Products.Find(_idBread);
+                var product = _ctx.Product.Find(_idBread);
                 product.Stock += (int)amount;
                 await _ctx.SaveChangesAsync(cancellationToken);
             }
