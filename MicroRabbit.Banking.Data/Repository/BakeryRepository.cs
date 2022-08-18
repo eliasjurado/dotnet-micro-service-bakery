@@ -1,6 +1,7 @@
 ﻿using MicroRabbit.Banking.Data.Context;
 using MicroRabbit.Banking.Domain.Interfaces;
 using MicroRabbit.Banking.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace MicroRabbit.Banking.Data.Repository
@@ -70,23 +71,54 @@ namespace MicroRabbit.Banking.Data.Repository
         {
             try
             {
-                var processedProduct = new Processed_Product
+                using var transaction = _ctx.Database.BeginTransaction();
+                try
                 {
-                    Amount = (int)amount,
-                    Expiration_Date = expirationDate,
-                    Id_Product = 1,
-                    Production_Date = DateTime.Now
-                };
-                await _ctx.Processed_Product.AddAsync(processedProduct, cancellationToken);
+                    var processedProduct = new Processed_Product
+                    {
+                        Amount = (int)amount,
+                        Expiration_Date = expirationDate,
+                        Id_Product = 1,
+                        Production_Date = DateTime.Now
+                    };
+                    await _ctx.Processed_Product.AddAsync(processedProduct, cancellationToken);
+                    await _ctx.SaveChangesAsync(cancellationToken);
 
-                var product = _ctx.Product.Find(_idBread);
-                product.Stock += (int)amount;
-                await _ctx.SaveChangesAsync(cancellationToken);
+                    var product = _ctx.Product.Find(_idBread);
+                    product.Stock += (int)amount;
+                    await _ctx.SaveChangesAsync(cancellationToken);
+
+                    await transaction.CommitAsync(cancellationToken);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public async Task<IEnumerable<BakeryProcessedProduct>> GetProcessedProductionAsyn(CancellationToken cancellationToken)
+        {
+            var products = await (from item in _ctx.Processed_Product
+                                  orderby item.Production_Date
+                                  select new BakeryProcessedProduct
+                                  {
+                                      Amoung = item.Amount,
+                                      ExpirationDate = item.Expiration_Date,
+                                      ProductionDate = item.Production_Date
+                                  }).ToListAsync(cancellationToken);
+            return products;
+        }
+
+        public async Task<IEnumerable<Product>> GetInventoryAsyn(CancellationToken cancellationToken)
+        {
+            var products = await (from item in _ctx.Product select item).ToListAsync(cancellationToken);
+            return products;
         }
     }
 }

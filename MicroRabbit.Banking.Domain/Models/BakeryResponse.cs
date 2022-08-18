@@ -3,8 +3,5 @@
     public class BakeryResponse
     {
         public string Message { set; get; }
-
     }
-
-   
 }
