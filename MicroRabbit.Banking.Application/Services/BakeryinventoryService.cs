@@ -39,5 +39,23 @@ namespace MicroRabbit.Banking.Application.Services
                 throw new Exception("Error registering bread production", ex);
             }
         }
+
+        public async Task<IEnumerable<BakeryProcessedProduct>> GetProcessedProductionAsyn(DateTime? expirationDate, CancellationToken cancellationToken)
+        {
+            var products = await _bakeryRepository.GetProcessedProductionAsyn(cancellationToken);
+            if (expirationDate.HasValue)
+                return (from item in products where item.ExpirationDate == expirationDate.Value select item);
+
+            return products;
+        }
+
+        public async Task<IEnumerable<Product>> GetInventoryAsyn(int? idProduct, CancellationToken cancellationToken)
+        {
+            var products = (await _bakeryRepository.GetInventoryAsyn(cancellationToken)).OrderBy(t => t.Name);
+            if (idProduct.HasValue)
+                return (from item in products where item.Id == idProduct.Value select item);
+
+            return products;
+        }
     }
 }
