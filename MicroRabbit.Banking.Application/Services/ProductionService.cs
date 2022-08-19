@@ -19,7 +19,8 @@ namespace MicroRabbit.Banking.Application.Services
             var createTransferCommand = new CreateTransferProductionCommand(
                 productionTransfer.ProductionAmount,
                 productionTransfer.ExpirationDate,
-                productionTransfer.IdProduct
+                productionTransfer.IdProduct,
+                productionTransfer.ProductionDate
                 );
             _bus.SendCommand(createTransferCommand);
         }

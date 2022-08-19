@@ -7,12 +7,14 @@ namespace MicroRabbit.Banking.Domain.Events
         public int ProductionAmount { get; set; }
         public DateTime ExpirationDate { get; set; }
         public int IdProduct { get; set; }
+        public DateTime ProductionDate { get; set; }
 
-        public TransferCreatedProductionEvent(int productionAmount, DateTime expirationDate, int idProduct)
+        public TransferCreatedProductionEvent(int productionAmount, DateTime expirationDate, int idProduct, DateTime productionDate)
         {
             ProductionAmount = productionAmount;
             ExpirationDate = expirationDate;
             IdProduct = idProduct;
+            ProductionDate = productionDate;
         }
     }
 }
