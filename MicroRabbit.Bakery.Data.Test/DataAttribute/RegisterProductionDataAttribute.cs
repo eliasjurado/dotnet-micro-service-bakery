@@ -2,9 +2,9 @@
 using System.Reflection;
 using Xunit.Sdk;
 
-namespace MicroRabbit.Bakery.Data.Test
+namespace MicroRabbit.Bakery.Data.Test.Data
 {
-    public class ConsumingInventoryDataAttribute : DataAttribute
+    public class RegisterProductionDataAttribute : DataAttribute
     {
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {

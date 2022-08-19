@@ -2,7 +2,7 @@
 using System.Reflection;
 using Xunit.Sdk;
 
-namespace MicroRabbit.Bakery.Data.Test
+namespace MicroRabbit.Bakery.Data.Test.Data
 {
     public class AvailableButterStockDataAttribute : DataAttribute
     {
@@ -10,18 +10,18 @@ namespace MicroRabbit.Bakery.Data.Test
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
             yield return new object[] {
-                new Product { Id = 3, Name = "Butter", Cost = 100.0m, Creation_Date = DateTime.Parse("2022-08-18"), Stock = 100 } ,
+                new Product { Id = 3, Name = "Butter", Cost = 100.0m, Creation_Date = DateTime.Parse("2022-08-18"), Stock = 1000 } ,
                 50f,
                 true
             };
             yield return new object[] {
-                new Product { Id = 3, Name = "Butter", Cost = 100.0m, Creation_Date = DateTime.Parse("2022-08-18"), Stock = 100 } ,
-                100f,
+                new Product { Id = 3, Name = "Butter", Cost = 100.0m, Creation_Date = DateTime.Parse("2022-08-18"), Stock = 1000 } ,
+                1000f,
                 false
             };
             yield return new object[] {
-                new Product { Id = 3, Name = "Butter", Cost = 100.0m, Creation_Date = DateTime.Parse("2022-08-18"), Stock = 100 } ,
-                200f,
+                new Product { Id = 3, Name = "Butter", Cost = 100.0m, Creation_Date = DateTime.Parse("2022-08-18"), Stock = 1000 } ,
+                2000f,
                 false
             };
         }
