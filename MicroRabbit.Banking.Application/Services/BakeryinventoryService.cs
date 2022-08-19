@@ -4,14 +4,14 @@ using MicroRabbit.Banking.Domain.Models;
 
 namespace MicroRabbit.Banking.Application.Services
 {
-    public class BakeryinventoryService : IBakeryInventoryService
+    public class BakeryInventoryService : IBakeryInventoryService
     {
         private const int _breadsPerDay = 250;
         private const int _requiredFlour = 22;
         private const int _requiredButter = 15;
         private readonly IBakeryRepository _bakeryRepository;
 
-        public BakeryinventoryService(IBakeryRepository bakeryRepository)
+        public BakeryInventoryService(IBakeryRepository bakeryRepository)
         {
             _bakeryRepository = bakeryRepository ?? throw new ArgumentNullException(nameof(bakeryRepository));
         }

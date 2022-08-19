@@ -6,6 +6,9 @@ namespace MicroRabbit.Banking.Data.Context
 {
     public class BakeryDbContext : DbContext
     {
+        public BakeryDbContext()
+        {
+        }
         public BakeryDbContext(DbContextOptions<BakeryDbContext> options) : base(options)
         {
         }
