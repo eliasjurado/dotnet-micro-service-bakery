@@ -5,7 +5,7 @@ namespace MicroRabbit.MVC.Services
 {
     public interface ITransferService
     {
-        Task Transfer(TransferDto transfer);
-        Task<IEnumerable<TransferLogViewModel>?> GetTransfer();
+        Task Transfer(TransferProductionDto transferDto);
+        Task<IEnumerable<TransferProductionLogViewModel>?> GetTransfer();
     }
 }

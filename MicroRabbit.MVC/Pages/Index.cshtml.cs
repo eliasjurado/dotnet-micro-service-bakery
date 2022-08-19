@@ -9,7 +9,7 @@ namespace MicroRabbit.MVC.Pages
     public class IndexModel : PageModel
     {
         private readonly ITransferService _transferService;
-        public IEnumerable<TransferLogViewModel>? TransferLogs { get; set; }
+        public IEnumerable<TransferProductionLogViewModel>? TransferLogs { get; set; }
         public IndexModel(ITransferService transferService)
         {
             _transferService = transferService;
@@ -20,7 +20,7 @@ namespace MicroRabbit.MVC.Pages
             TransferLogs = await _transferService.GetTransfer();
 
         }
-        public async Task<IActionResult> OnPost(TransferDto transferDto)
+        public async Task<IActionResult> OnPost(TransferProductionDto transferDto)
         {
             await _transferService.Transfer(transferDto);
             return RedirectToPage("Index");
