@@ -2,7 +2,7 @@
 using System.Reflection;
 using Xunit.Sdk;
 
-namespace Calculations.Test
+namespace MicroRabbit.Bakery.Data.Test
 {
     public class AvailableFlourStockDataAttribute : DataAttribute
     {

@@ -63,7 +63,7 @@ namespace MicroRabbit.Bakery.Data.Test
                 .UseInMemoryDatabase(databaseName: "BakeryDB")
                 .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
-            var mockContext = new BakeryDbContext(mockOptions, _appSettings);
+            var mockContext = new BakeryDbContext(mockOptions);
 
             var butterExists = mockContext.Product.Find(butter.Id);
             if (butterExists == null)
@@ -79,7 +79,7 @@ namespace MicroRabbit.Bakery.Data.Test
             }
             mockContext.SaveChanges();
 
-            var mockRepository = new BakeryRepository(mockContext);
+            var mockRepository = new BakeryRepository(mockContext, _appSettings);
             var cancellationTokenSource = new CancellationTokenSource(1000);
 
             await mockRepository.ConsumingInventoryAsync(projectedFlour, projectedButter, cancellationTokenSource.Token);
@@ -89,10 +89,5 @@ namespace MicroRabbit.Bakery.Data.Test
             Assert.Equal(expectedButterBalance, resultButterBalance);
             Assert.Equal(expectedFlourBalance, resultFlourBalance);
         }
-        //[Theory]
-        //public async Task RegisterProductionAsync(float amount, DateTime expirationDate)
-        //{
-
-        //}
     }
 }
