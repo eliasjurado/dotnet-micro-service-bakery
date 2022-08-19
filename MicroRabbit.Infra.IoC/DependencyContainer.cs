@@ -32,27 +32,35 @@ namespace MicroRabbit.Infra.IoC
 
             //Subscriptions
             services.AddTransient<TransferEventHandler>();
+            services.AddTransient<TransferProductionEventHandler>();
+
 
             //Domain Events
             services.AddTransient<IEventHandler<TransferCreatedEvent>, TransferEventHandler>();
+            services.AddTransient<IEventHandler<TransferCreatedProductionEvent>, TransferProductionEventHandler>();
 
             //Domain Banking Commands
             services.AddTransient<IRequestHandler<CreateTransferCommand, bool>, TransferCommandHandler>();
+            services.AddTransient<IRequestHandler<CreateTransferProductionCommand, bool>, TransferCommandProductionHandler>();
 
             //Application Services
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IProductionService, ProductionService>();
             services.AddTransient<ITransferService, TransferService>();
+            services.AddTransient<ITransferProductionService, TransferProductionService>();
+
 
             //Data
             services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<ITransferRepository, TransferRepository>();
+            services.AddTransient<ITransferProductionRepository, TransferProductionRepository>();
             services.AddTransient<BankingDbContext>();
             services.AddTransient<TransferDbContext>();
 
             //Bakery
-            services.AddTransient<IBakeryInventoryService, BakeryinventoryService>();
-            services.AddTransient<IBakeryRepository, BakeryRepository>();
-            services.AddTransient<BakeryDbContext>();
+            //services.AddTransient<IBakeryInventoryService, BakeryinventoryService>();
+            //services.AddTransient<IBakeryRepository, BakeryRepository>();
+            //services.AddTransient<BakeryDbContext>();
         }
     }
 }

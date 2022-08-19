@@ -20,5 +20,6 @@ namespace MicroRabbit.Transfer.Data.Context
             }
         }
         public DbSet<TransferLog> TransferLogs { get; set; }
+        public DbSet<TransferProductionLog> TransferProductionLogs { get; set; }
     }
 }

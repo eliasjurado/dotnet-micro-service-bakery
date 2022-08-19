@@ -37,6 +37,7 @@ if (app.Environment.IsDevelopment())
 
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 eventBus.Subscribe<TransferCreatedEvent, TransferEventHandler>();
+eventBus.Subscribe<TransferCreatedProductionEvent, TransferProductionEventHandler>();
 
 app.UseHttpsRedirection();
 
