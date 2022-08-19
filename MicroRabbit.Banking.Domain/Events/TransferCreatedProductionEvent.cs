@@ -1,0 +1,18 @@
+﻿using MicroRabbit.Domain.Core.Events;
+
+namespace MicroRabbit.Banking.Domain.Events
+{
+    public class TransferCreatedProductionEvent : Event
+    {
+        public int ProductionAmount { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public int IdProduct { get; set; }
+
+        public TransferCreatedProductionEvent(int productionAmount, DateTime expirationDate, int idProduct)
+        {
+            ProductionAmount = productionAmount;
+            ExpirationDate = expirationDate;
+            IdProduct = idProduct;
+        }
+    }
+}
