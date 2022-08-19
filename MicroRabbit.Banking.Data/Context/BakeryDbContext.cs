@@ -18,5 +18,6 @@ namespace MicroRabbit.Banking.Data.Context
         }
         public DbSet<Product> Product { set; get; }
         public DbSet<Processed_Product> Processed_Product { set; get; }
+        public DbSet<Sale_Detail> Sale_Detail { set; get; }
     }
 }

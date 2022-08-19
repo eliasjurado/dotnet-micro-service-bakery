@@ -12,6 +12,7 @@ namespace MicroRabbit.Banking.Data.Repository
         private int _idButter = 3;
         private int _idFluor = 2;
         private int _idBread = 1;
+        private int _idSale = 1;
 
         private readonly IOptions<ProductSetting> _appSettings;
 
@@ -87,6 +88,42 @@ namespace MicroRabbit.Banking.Data.Repository
                     var product = _ctx.Product.Find(_idBread);
                     product.Stock += (int)amount;
                     await _ctx.SaveChangesAsync(cancellationToken);
+
+                    await transaction.CommitAsync(cancellationToken);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task RegisterSaleAsync(float quantity, float price, CancellationToken cancellationToken)
+        {
+            try
+            {
+                using var transaction = _ctx.Database.BeginTransaction();
+                try
+                {
+                    var sale_detail = new Sale_Detail
+                    {
+                        Id_sale = 1,
+                        Id_product = 1,
+                        Quantity = Convert.ToInt32(quantity),
+                        Price = Convert.ToDecimal(price)
+                    };
+                    await _ctx.Sale_Detail.AddAsync(sale_detail, cancellationToken);
+                    await _ctx.SaveChangesAsync(cancellationToken);
+
+                    var product = _ctx.Product.Find(_idBread);
+                    product.Stock -= (int)quantity;
+                    await _ctx.SaveChangesAsync(cancellationToken);
+
 
                     await transaction.CommitAsync(cancellationToken);
                 }
