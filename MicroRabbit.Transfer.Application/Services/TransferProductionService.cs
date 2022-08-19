@@ -1,4 +1,5 @@
-﻿using MicroRabbit.Domain.Core.Bus;
+﻿using MicroRabbit.Banking.Transfer.Commands;
+using MicroRabbit.Domain.Core.Bus;
 using MicroRabbit.Transfer.Application.Interfaces;
 using MicroRabbit.Transfer.Domain.Interfaces;
 using MicroRabbit.Transfer.Domain.Models;
@@ -14,6 +15,17 @@ namespace MicroRabbit.Transfer.Application.Services
         {
             _transferProductionRepository = transferProductionRepository;
             _bus = bus;
+        }
+
+        public void TransferStock(TransferProductionLog productionTransfer)
+        {
+            var createTransferCommand = new CreateTransferStockCommand(
+                productionTransfer.ProductionAmount,
+                productionTransfer.ExpirationDate,
+                productionTransfer.IdProduct,
+                productionTransfer.ProductionDate
+                );
+            _bus.SendCommand(createTransferCommand);
         }
 
         public IEnumerable<TransferProductionLog> GetTransferProductionLogs()
