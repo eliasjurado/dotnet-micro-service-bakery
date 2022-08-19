@@ -1,47 +1,48 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Banking Client";
+    ViewData["Title"] = "Bakery Client";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Banking Client</h1>
-    <p>Transfers</p>
+    <h1 class="display-4">Bread Production</h1>
+    <p>Production History</p>
 </div>
 <div class="container p-3">
     <form method="post">
         <div class="border p-3 mt-4">
             <div class="row pb-2">
-                <h3>Create Transfer</h3>
+                <h3>Register Bread Production</h3>
             </div>
              <div class="mb-3">
-                <label for="FromAccount" style="width:25%">Origin Account : </label>
-                <input type="text" name="FromAccount"/>
+                <label for="ProductionAmount" style="width:25%">Production Amount : </label>
+                <input type="number" name="ProductionAmount" min=0 />
             </div>
             <div class="mb-3">
-                <label for="ToAccount" style="width:25%">Destination Account : </label>
-                <input type="text" name="ToAccount"/>
+                <label for="ProductionDate" style="width:25%">Production Date : </label>
+                <input type="date" name="ProductionDate" />
             </div>
             <div class="mb-3">
-                <label for="TransferAmount" style="width:25%">Amount : </label>
-                <input type="text" name="TransferAmount"/>
+                <label for="ExpirationDate" style="width:25%">Expiration Date : </label>
+                <input type="date" name="ExpirationDate" />
             </div>
-            <input type="submit" name="Transfer" class="btn btn-primary" style="width: 150px;" value="Create"/>
+           
+            <input type="submit" name="Transfer" class="btn btn-primary" style="width: 150px;" value="Register"/>
         </div>
        
     </form>
 
     <div class="border p-3 mt-4">
         <div class="row pb-2">
-            <h3>Transfer Log</h3>
+            <h3>Bread Production Log</h3>
         </div>
          <table class="table table-bordered table-striped" style="width:100%">
             <thead class="fw-bold">
                 <tr>
-                    <td width="25%">Id Transfer</td>
-                    <td width="25%">From Account</td>   
-                    <td width="25%">To Account</td>   
-                    <td width="25%">Transfer Amount</td>   
+                    <td width="25%">Id Production</td>
+                    <td width="25%">Production Amount</td>   
+                    <td width="25%">Production Date</td>   
+                    <td width="25%">Expiration Date</td>   
                 </tr>
             </thead>
             <tbody>
@@ -49,9 +50,9 @@
                 {
                     <tr>
                         <td>@obj.Id</td>
-                        <td>@obj.FromAccount</td>   
-                        <td>@obj.ToAccount</td>   
-                        <td>@obj.TransferAmount</td>  
+                        <td>@obj.ProductionAmount</td>   
+                        <td>@obj.ProductionDate</td>   
+                        <td>@obj.ExpirationDate</td>  
                     </tr> 
                 }
             </tbody>

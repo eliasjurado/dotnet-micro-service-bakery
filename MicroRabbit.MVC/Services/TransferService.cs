@@ -13,16 +13,17 @@ namespace MicroRabbit.MVC.Services
         {
             _apiClient = apiClient;
         }
-        public async Task Transfer(TransferDto transferDto)
+
+        public async Task<IEnumerable<TransferProductionLogViewModel>?> GetTransfer()
         {
             try
             {
-                var uri = "https://localhost:5002/api/Banking";
-                var transferContent = new StringContent(
-                    JsonConvert.SerializeObject(transferDto),
-                    Encoding.UTF8, "application/json");
-                var response = await _apiClient.PostAsync(uri, transferContent);
+                var uri = "https://localhost:5004/api/TransferProduction";
+                var response = await _apiClient.GetAsync(uri);
+                var body = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<IEnumerable<TransferProductionLogViewModel>>(body);
                 response.EnsureSuccessStatusCode();
+                return result;
             }
             catch (Exception e)
             {
@@ -30,16 +31,17 @@ namespace MicroRabbit.MVC.Services
                 throw;
             }
         }
-        public async Task<IEnumerable<TransferLogViewModel>?> GetTransfer()
+
+        public async Task Transfer(TransferProductionDto transferDto)
         {
             try
             {
-                var uri = "https://localhost:5004/api/Transfer";
-                var response = await _apiClient.GetAsync(uri);
-                var body = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<IEnumerable<TransferLogViewModel>>(body);
+                var uri = "https://localhost:5002/api/Production";
+                var transferContent = new StringContent(
+                    JsonConvert.SerializeObject(transferDto),
+                    Encoding.UTF8, "application/json");
+                var response = await _apiClient.PostAsync(uri, transferContent);
                 response.EnsureSuccessStatusCode();
-                return result;
             }
             catch (Exception e)
             {

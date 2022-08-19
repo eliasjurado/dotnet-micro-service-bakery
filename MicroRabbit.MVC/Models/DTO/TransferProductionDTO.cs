@@ -1,6 +1,6 @@
 ﻿namespace MicroRabbit.MVC.Models.Dto
 {
-    public class TransferDto
+    public class TransferProductionDto
     {
         public int Id { get; set; }
         public int ProductionAmount { get; set; }
