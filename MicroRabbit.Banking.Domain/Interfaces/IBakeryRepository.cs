@@ -12,6 +12,8 @@ namespace MicroRabbit.Banking.Domain.Interfaces
 
         Task RegisterProductionAsync(float amount, DateTime expirationDate, CancellationToken cancellationToken);
 
+        Task RegisterSaleAsync(float quantity, float price, CancellationToken cancellationToken);
+
         Task<IEnumerable<BakeryProcessedProduct>> GetProcessedProductionAsyn(CancellationToken cancellationToken);
 
         Task<IEnumerable<Product>> GetInventoryAsyn(CancellationToken cancellationToken);
