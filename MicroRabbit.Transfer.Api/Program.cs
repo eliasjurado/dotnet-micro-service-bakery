@@ -1,4 +1,5 @@
 using MediatR;
+using MicroRabbit.Banking.Domain.Models;
 using MicroRabbit.Domain.Core.Bus;
 using MicroRabbit.Infra.IoC;
 using MicroRabbit.Transfer.Data.Context;
@@ -22,7 +23,7 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Transfer Microservice", Version = "v1" });
 });
 builder.Services.AddMediatR(typeof(StartupBase));
-
+builder.Services.Configure<ProductSetting>(builder.Configuration.GetSection("ProductSetting"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

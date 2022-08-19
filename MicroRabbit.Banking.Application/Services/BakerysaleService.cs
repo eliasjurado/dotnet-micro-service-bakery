@@ -4,12 +4,12 @@ using MicroRabbit.Banking.Domain.Models;
 
 namespace MicroRabbit.Banking.Application.Services
 {
-    public class BakerysaleService : IBakerySaleService
+    public class BakerySaleService : IBakerySaleService
     {
 
         private readonly IBakeryRepository _bakeryRepository;
 
-        public BakerysaleService(IBakeryRepository bakeryRepository)
+        public BakerySaleService(IBakeryRepository bakeryRepository)
         {
             _bakeryRepository = bakeryRepository ?? throw new ArgumentNullException(nameof(bakeryRepository));
         }
