@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Mango.Services.ProductAPI.Models;
 using Mango.Services.ProductAPI.Models.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mango.Services.ProductAPI
 {
@@ -16,6 +12,8 @@ namespace Mango.Services.ProductAPI
             {
                 config.CreateMap<ProductDto, Product>();
                 config.CreateMap<Product, ProductDto>();
+                config.CreateMap<ProcessProduct, ProcessProductDto>();
+                config.CreateMap<ProcessProductDto, ProcessProduct>();
             });
 
             return mappingConfig;

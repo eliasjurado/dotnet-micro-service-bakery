@@ -9,6 +9,7 @@ namespace Mango.Services.ProductAPI.Test.DataAttributes
 
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
+            /*
             yield return new object[] {
                 new Product { Id = 3, Name = "Butter", Cost = 100.0m, Creation_Date = DateTime.Parse("2022-08-18"), Stock = 1000 } ,
                 50f,
@@ -24,6 +25,8 @@ namespace Mango.Services.ProductAPI.Test.DataAttributes
                 2000f,
                 false
             };
+            */
+            return null;
         }
 
     }

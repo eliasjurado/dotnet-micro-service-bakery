@@ -14,6 +14,7 @@ namespace Mango.Services.ProductAPI.DbContexts
 
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProcessProduct> ProcessProducts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,39 +24,40 @@ namespace Mango.Services.ProductAPI.DbContexts
             modelBuilder.Entity<Product>().HasData(new Product
             {
                 ProductId = 1,
-                Name = "Samosa",
-                Price = 15,
-                Description = "Praesent scelerisque, mi sed ultrices condimentum, lacus ipsum viverra massa, in lobortis sapien eros in arcu. Quisque vel lacus ac magna vehicula sagittis ut non lacus.<br/>Sed volutpat tellus lorem, lacinia tincidunt tellus varius nec. Vestibulum arcu turpis, facilisis sed ligula ac, maximus malesuada neque. Phasellus commodo cursus pretium.",
-                ImageUrl = "https://dotnetmastery.blob.core.windows.net/mango/14.jpg",
-                CategoryName = "Appetizer"
+                Name = "Bread",
+                Price = 1,
+                Description = "Bread is a food consisting of flour or meal that is moistened, kneaded into dough, and often fermented using yeast, and it has been a major sustenance since prehistoric times.",
+                ImageUrl = "https://dojoblob.blob.core.windows.net/store/bread.jpg",
+                CategoryName = "Food"
             });
             modelBuilder.Entity<Product>().HasData(new Product
             {
                 ProductId = 2,
-                Name = "Paneer Tikka",
+                Name = "Butter",
                 Price = 13.99,
-                Description = "Praesent scelerisque, mi sed ultrices condimentum, lacus ipsum viverra massa, in lobortis sapien eros in arcu. Quisque vel lacus ac magna vehicula sagittis ut non lacus.<br/>Sed volutpat tellus lorem, lacinia tincidunt tellus varius nec. Vestibulum arcu turpis, facilisis sed ligula ac, maximus malesuada neque. Phasellus commodo cursus pretium.",
-                ImageUrl = "https://dotnetmastery.blob.core.windows.net/mango/12.jpg",
-                CategoryName = "Appetizer"
+                Description = "Butter is a dairy product made from the fat and protein components of churned cream. It is a semi-solid emulsion at room temperature, consisting of approximately 80% butterfat. It is used at room temperature as a spread, melted as a condiment, and used as a fat in baking, sauce-making, pan frying, and other cooking procedures.",
+                ImageUrl = "https://dojoblob.blob.core.windows.net/store/butter.jpg",
+                CategoryName = "Food"
             });
             modelBuilder.Entity<Product>().HasData(new Product
             {
                 ProductId = 3,
-                Name = "Sweet Pie",
+                Name = "Flour",
                 Price = 10.99,
-                Description = "Praesent scelerisque, mi sed ultrices condimentum, lacus ipsum viverra massa, in lobortis sapien eros in arcu. Quisque vel lacus ac magna vehicula sagittis ut non lacus.<br/>Sed volutpat tellus lorem, lacinia tincidunt tellus varius nec. Vestibulum arcu turpis, facilisis sed ligula ac, maximus malesuada neque. Phasellus commodo cursus pretium.",
-                ImageUrl = "https://dotnetmastery.blob.core.windows.net/mango/11.jpg",
-                CategoryName = "Dessert"
+                Description = "Flour is a powder made by grinding raw grains, roots, beans, nuts, or seeds",
+                ImageUrl = "https://dojoblob.blob.core.windows.net/store/flour.jpg",
+                CategoryName = "Food"
             });
             modelBuilder.Entity<Product>().HasData(new Product
             {
                 ProductId = 4,
-                Name = "Pav Bhaji",
+                Name = "Coffee",
                 Price = 15,
-                Description = "Praesent scelerisque, mi sed ultrices condimentum, lacus ipsum viverra massa, in lobortis sapien eros in arcu. Quisque vel lacus ac magna vehicula sagittis ut non lacus.<br/>Sed volutpat tellus lorem, lacinia tincidunt tellus varius nec. Vestibulum arcu turpis, facilisis sed ligula ac, maximus malesuada neque. Phasellus commodo cursus pretium.",
-                ImageUrl = "https://dotnetmastery.blob.core.windows.net/mango/13.jpg",
-                CategoryName = "Entree"
+                Description = "Coffee is a brewed drink prepared from roasted coffee beans, the seeds of berries from certain flowering plants in the Coffea genus",
+                ImageUrl = "https://dojoblob.blob.core.windows.net/store/coffee.jpg",
+                CategoryName = "Drink"
             });
+            
         }
     }
 }
