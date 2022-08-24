@@ -38,7 +38,8 @@ namespace Mango.Services.ProductAPI.Repository
 
         public async Task<bool> DeleteProduct(int productId)
         {
-            try{
+            try
+            {
                 Product product = await _db.Products.FirstOrDefaultAsync(u => u.ProductId == productId);
                 if (product == null)
                 {
@@ -56,7 +57,7 @@ namespace Mango.Services.ProductAPI.Repository
 
         public async Task<ProductDto> GetProductById(int productId)
         {
-            Product product = await _db.Products.Where(x=>x.ProductId==productId).FirstOrDefaultAsync();
+            Product product = await _db.Products.Where(x => x.ProductId == productId).FirstOrDefaultAsync();
             return _mapper.Map<ProductDto>(product);
         }
 
@@ -64,7 +65,32 @@ namespace Mango.Services.ProductAPI.Repository
         {
             List<Product> productList = await _db.Products.ToListAsync();
             return _mapper.Map<List<ProductDto>>(productList);
+        }
 
+        public async Task<ProcessProductDto> RegisterBreadProductionAsync(ProcessProductDto processProductDto)
+        {
+            ProcessProduct newProcessProduct = _mapper.Map<ProcessProductDto, ProcessProduct>(processProductDto);
+            _db.ProcessProducts.Add(newProcessProduct);
+
+            await _db.SaveChangesAsync();
+            return _mapper.Map<ProcessProduct, ProcessProductDto>(newProcessProduct);
+        }
+
+        public async Task<double> GetProductAvailableAsync(int idProduct)
+        {
+            Product product = await _db.Products.Where(x => x.ProductId == idProduct).FirstOrDefaultAsync();
+            return product.Stock;
+        }
+
+        public async Task<ProductDto> UpdateProductStockAsync(double amount, int idProduct)
+        {
+            Product product = await _db.Products.Where(x => x.ProductId == idProduct).FirstOrDefaultAsync();
+
+            product.Stock -= amount;
+            _db.Products.Update(product);
+            await _db.SaveChangesAsync();
+
+            return _mapper.Map<Product, ProductDto>(product);
         }
     }
 }

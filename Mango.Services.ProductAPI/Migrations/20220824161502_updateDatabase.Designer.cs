@@ -4,14 +4,16 @@ using Mango.Services.ProductAPI.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mango.Services.ProductAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220824161502_updateDatabase")]
+    partial class updateDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,7 +81,7 @@ namespace Mango.Services.ProductAPI.Migrations
                             ProductId = 1,
                             CategoryName = "Food",
                             Description = "Bread is a food consisting of flour or meal that is moistened, kneaded into dough, and often fermented using yeast, and it has been a major sustenance since prehistoric times.",
-                            ImageUrl = "https://dojoblob.blob.core.windows.net/store/bread.jpg",
+                            ImageUrl = "https://dotnetmastery.blob.core.windows.net/mango/14.jpg",
                             Name = "Bread",
                             Price = 1.0,
                             Stock = 0.0
@@ -89,7 +91,7 @@ namespace Mango.Services.ProductAPI.Migrations
                             ProductId = 2,
                             CategoryName = "Food",
                             Description = "Butter is a dairy product made from the fat and protein components of churned cream. It is a semi-solid emulsion at room temperature, consisting of approximately 80% butterfat. It is used at room temperature as a spread, melted as a condiment, and used as a fat in baking, sauce-making, pan frying, and other cooking procedures.",
-                            ImageUrl = "https://dojoblob.blob.core.windows.net/store/butter.jpg",
+                            ImageUrl = "https://dotnetmastery.blob.core.windows.net/mango/12.jpg",
                             Name = "Butter",
                             Price = 13.99,
                             Stock = 0.0
@@ -99,7 +101,7 @@ namespace Mango.Services.ProductAPI.Migrations
                             ProductId = 3,
                             CategoryName = "Food",
                             Description = "Flour is a powder made by grinding raw grains, roots, beans, nuts, or seeds",
-                            ImageUrl = "https://dojoblob.blob.core.windows.net/store/flour.jpg",
+                            ImageUrl = "https://dotnetmastery.blob.core.windows.net/mango/11.jpg",
                             Name = "Flour",
                             Price = 10.99,
                             Stock = 0.0
@@ -109,7 +111,7 @@ namespace Mango.Services.ProductAPI.Migrations
                             ProductId = 4,
                             CategoryName = "Drink",
                             Description = "Coffee is a brewed drink prepared from roasted coffee beans, the seeds of berries from certain flowering plants in the Coffea genus",
-                            ImageUrl = "https://dojoblob.blob.core.windows.net/store/coffee.jpg",
+                            ImageUrl = "https://dotnetmastery.blob.core.windows.net/mango/13.jpg",
                             Name = "Coffee",
                             Price = 15.0,
                             Stock = 0.0
