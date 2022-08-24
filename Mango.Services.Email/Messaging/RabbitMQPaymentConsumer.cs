@@ -17,8 +17,7 @@ namespace Mango.Services.PaymentAPI.Messaging
 
         private IConnection _connection;
         private IModel _channel;
-        private const string ExchangeName= "DirectPaymentUpdate_Exchange";
-        private const string PaymentEmailUpdateQueueName = "PaymentEmailUpdateQueueName";
+        private const string ExchangeName= "PublishSubscribePaymentUpdate_Exchange";
         private readonly EmailRepository _emailRepo;
         string queueName = "";
         public RabbitMQPaymentConsumer(EmailRepository emailRepo)
@@ -33,10 +32,9 @@ namespace Mango.Services.PaymentAPI.Messaging
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            
-            _channel.ExchangeDeclare(ExchangeName, ExchangeType.Direct);
-            _channel.QueueDeclare(PaymentEmailUpdateQueueName, false, false, false, null);
-            _channel.QueueBind(PaymentEmailUpdateQueueName, ExchangeName, "PaymentEmail");
+            _channel.ExchangeDeclare(ExchangeName, ExchangeType.Fanout);
+            queueName= _channel.QueueDeclare().QueueName;
+            _channel.QueueBind(queueName, ExchangeName,"");
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -51,7 +49,7 @@ namespace Mango.Services.PaymentAPI.Messaging
 
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
-            _channel.BasicConsume(PaymentEmailUpdateQueueName, false, consumer);
+            _channel.BasicConsume(queueName, false, consumer);
 
             return Task.CompletedTask;
         }
