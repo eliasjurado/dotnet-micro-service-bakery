@@ -27,22 +27,34 @@ namespace Mango.Services.OrderAPI.Controllers
         [HttpPost]
         //[Authorize]
         [Route("RegisterSell")]
-        public async Task<object> RegisterSellAsync([FromBody] SellHeaderDto sell)
+        public async Task<object> RegisterSellAsync([FromBody] SellHeader sell)        
         {
             try
             {
-                //GetProductAvailableAsync FROM PRODUCT-->idProduct: 8
-                int idProduct = sell.ProductId;
-                var inventory = await _productService.GetProductAvailableAsync<int>(idProduct);
-                var newSell = new SellHeader
-                { FirstName = sell.FirstName, IdSellHeader = sell.IdSellHeader, UserId = sell.UserId,
-                SellDetails = new List<SellDetails> 
-                { new SellDetails { Count = sell.Count, IdSellHeader = sell.IdSellHeader, Price = sell.Price, ProductId = sell.ProductId, Id = sell.IdSellHeader} },
-                SellTime = sell.SellTime
-                };
-                _response.IsSuccess = await _orderRepository.AddSell(newSell);
-                //IF IsSuccess == TRUE, UpdateProductStockAsync FROM PRODUCT-->amount,idProduct
-                _response.DisplayMessage = _response.IsSuccess ? "Sell have been saved" : "Sell can't be saved";
+                _response.IsSuccess = false;
+                var itemToBuy = (from item in sell.SellDetails select item).FirstOrDefault();                
+                var inventory = await _productService.GetProductAvailableAsync<ResponseDto>(itemToBuy.ProductId);
+
+                if (inventory.IsSuccess && (((Int64)inventory.Result) > itemToBuy.Count))
+                {
+                    var updateInventory = await _productService.UpdateProductStockAsync<ResponseDto>(itemToBuy.Count, itemToBuy.ProductId);
+                    if (updateInventory.IsSuccess)
+                    {
+                        var sellResult = await _orderRepository.AddSell(sell);
+                        if (sellResult)
+                        {
+                            _response.IsSuccess = true;
+                            _response.DisplayMessage = "Sell have been saved";
+                        }
+                        else
+                            _response.DisplayMessage = "System couldn't update the inventory.";
+
+                    }
+                }
+                else
+                {
+                    _response.DisplayMessage = "Out of stock";
+                }                
                 
             }
             catch (Exception ex)
@@ -54,37 +66,6 @@ namespace Mango.Services.OrderAPI.Controllers
             return _response;
         }
 
-        [HttpPost]
-        //[Authorize]
-        [Route("RegisterSell1")]
-        public async Task<object> RegisterSell1Async( SellHeaderDto sell)
-        {
-            try
-            {
-                //GetProductAvailableAsync FROM PRODUCT-->idProduct: 8
-                int idProduct = sell.ProductId;
-                var inventory = await _productService.GetProductAvailableAsync<int>(idProduct);
-                var newSell = new SellHeader
-                {
-                    FirstName = sell.FirstName,
-                    IdSellHeader = sell.IdSellHeader,
-                    UserId = sell.UserId,
-                    SellDetails = new List<SellDetails>
-                { new SellDetails { Count = sell.Count, IdSellHeader = sell.IdSellHeader, Price = sell.Price, ProductId = sell.ProductId, Id = sell.IdSellHeader} },
-                    SellTime = sell.SellTime
-                };
-                _response.IsSuccess = await _orderRepository.AddSell(newSell);
-                //IF IsSuccess == TRUE, UpdateProductStockAsync FROM PRODUCT-->amount,idProduct
-                _response.DisplayMessage = _response.IsSuccess ? "Sell have been saved" : "Sell can't be saved";
-
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.ErrorMessages
-                     = new List<string>() { ex.ToString() };
-            }
-            return _response;
-        }
+       
     }
 }

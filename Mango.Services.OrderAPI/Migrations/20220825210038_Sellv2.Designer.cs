@@ -4,14 +4,16 @@ using Mango.Services.OrderAPI.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mango.Services.OrderAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220825210038_Sellv2")]
+    partial class Sellv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,9 +126,12 @@ namespace Mango.Services.OrderAPI.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SellHeaderIdSellHeader")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdSellHeader");
+                    b.HasIndex("SellHeaderIdSellHeader");
 
                     b.ToTable("SellDetails");
                 });
@@ -165,13 +170,9 @@ namespace Mango.Services.OrderAPI.Migrations
 
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.SellDetails", b =>
                 {
-                    b.HasOne("Mango.Services.OrderAPI.Models.SellHeader", "SellHeader")
+                    b.HasOne("Mango.Services.OrderAPI.Models.SellHeader", null)
                         .WithMany("SellDetails")
-                        .HasForeignKey("IdSellHeader")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SellHeader");
+                        .HasForeignKey("SellHeaderIdSellHeader");
                 });
 
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderHeader", b =>

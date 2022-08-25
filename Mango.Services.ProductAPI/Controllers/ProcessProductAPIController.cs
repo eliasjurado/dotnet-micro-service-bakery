@@ -58,7 +58,7 @@ namespace Mango.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [HttpPost]
+        [HttpGet]
         //[Authorize]
         [Route("UpdateProductStock")]
         public async Task<object> UpdateProductStockAsync(double amount, int idProduct)
@@ -66,6 +66,8 @@ namespace Mango.Services.ProductAPI.Controllers
             try
             {
                 _response.Result = await _productRepository.UpdateProductStockAsync(amount, idProduct);
+                _response.DisplayMessage = "Product updated";
+
             }
             catch (Exception ex)
             {

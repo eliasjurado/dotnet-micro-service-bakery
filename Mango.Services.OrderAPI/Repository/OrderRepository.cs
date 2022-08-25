@@ -35,10 +35,18 @@ namespace Mango.Services.OrderAPI.Repository
 
         public async Task<bool> AddSell(SellHeader sellHeader)
         {
-            await using var _db = new ApplicationDbContext(_dbContext);
-            _db.SellHeaders.Add(sellHeader);
-            await _db.SaveChangesAsync();
-            return true;
+            try
+            {
+                await using var _db = new ApplicationDbContext(_dbContext);
+                _db.SellHeaders.Add(sellHeader);
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+
+                return false;
+            }
         }
     }
 }

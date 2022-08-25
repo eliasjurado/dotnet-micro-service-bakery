@@ -20,8 +20,18 @@ namespace Mango.Services.OrderAPI.Services
             return await this.SendAsync<T>(new ApiRequest()
             {
                 ApiType = ApiType.GET,
-                Url = ProductAPIBase + $"/api/processproducts/ProductAvailable/{idProduct}",
-                AccessToken = ""
+                Url = ProductAPIBase + $"/api/processproducts/ProductAvailable?idProduct={idProduct}"
+                
+            });
+        }
+
+        public async Task<T> UpdateProductStockAsync<T>(double amount, int idProduct)
+        {
+            return await this.SendAsync<T>(new ApiRequest()
+            {
+                ApiType = ApiType.GET,                
+                Url = ProductAPIBase + $"/api/processproducts/UpdateProductStock?amount={amount}&idProduct={idProduct}"
+                
             });
         }
 

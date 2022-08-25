@@ -9,6 +9,12 @@ namespace Mango.Services.OrderAPI.DbContexts
         {
         }
 
+        protected override  void OnModelCreating(ModelBuilder model)
+        {
+            model.Entity<SellHeader>().Property(t => t.IdSellHeader).ValueGeneratedOnAdd();
+            model.Entity<SellDetails>().Property(t => t.Id).ValueGeneratedOnAdd();
+        }
+
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
 
