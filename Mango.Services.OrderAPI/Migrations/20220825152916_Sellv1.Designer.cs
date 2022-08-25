@@ -4,14 +4,16 @@ using Mango.Services.OrderAPI.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Mango.Services.OrderAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220825152916_Sellv1")]
+    partial class Sellv1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,9 +43,14 @@ namespace Mango.Services.OrderAPI.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SellHeaderIdSellHeader")
+                        .HasColumnType("int");
+
                     b.HasKey("OrderDetailsId");
 
                     b.HasIndex("OrderHeaderId");
+
+                    b.HasIndex("SellHeaderIdSellHeader");
 
                     b.ToTable("OrderDetails");
                 });
@@ -126,8 +133,6 @@ namespace Mango.Services.OrderAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdSellHeader");
-
                     b.ToTable("SellDetails");
                 });
 
@@ -160,18 +165,11 @@ namespace Mango.Services.OrderAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OrderHeader");
-                });
-
-            modelBuilder.Entity("Mango.Services.OrderAPI.Models.SellDetails", b =>
-                {
-                    b.HasOne("Mango.Services.OrderAPI.Models.SellHeader", "SellHeader")
+                    b.HasOne("Mango.Services.OrderAPI.Models.SellHeader", null)
                         .WithMany("SellDetails")
-                        .HasForeignKey("IdSellHeader")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SellHeaderIdSellHeader");
 
-                    b.Navigation("SellHeader");
+                    b.Navigation("OrderHeader");
                 });
 
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderHeader", b =>

@@ -8,8 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Mango.Services.ProductAPI.Controllers
-{
-
+{    
     [Route("api/products")]
     public class ProductAPIController : ControllerBase
     {
