@@ -3,8 +3,11 @@ using Mango.MessageBus;
 using Mango.Services.OrderAPI.DbContexts;
 using Mango.Services.OrderAPI.Extension;
 using Mango.Services.OrderAPI.Messaging;
+using Mango.Services.OrderAPI.Models;
 using Mango.Services.OrderAPI.RabbitMQSender;
 using Mango.Services.OrderAPI.Repository;
+using Mango.Services.OrderAPI.Services;
+using Mango.Services.OrderAPI.Services.IServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,11 +42,14 @@ namespace Mango.Services.OrderAPI
             services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddHttpClient<IProductService, ProductService>();
+            Util.ProductAPIBase = Configuration["ServiceUrls:ProductAPI"];
 
             //IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
             //services.AddSingleton(mapper);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProductService, ProductService>();
 
             var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
@@ -55,6 +61,8 @@ namespace Mango.Services.OrderAPI
             services.AddSingleton<IMessageBus, AzureServiceBusMessageBus>();
             services.AddSingleton<IRabbitMQOrderMessageSender, RabbitMQOrderMessageSender>();
             services.AddControllers();
+
+            
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
