@@ -22,13 +22,13 @@ namespace Mango.Services.OrderAPI.Controllers
         [HttpPost]
         //[Authorize]
         [Route("RegisterSell")]
-        public async Task<object> RegisterSellAsync([FromBody] OrderHeader sell)
+        public async Task<object> RegisterSellAsync([FromBody] SellHeader sell)
         {
             try
             {
-                //GetProductAvailableAsync FROM PRODUCT
-                _response.IsSuccess = await _orderRepository.AddOrder(sell);
-                //IF IsSuccess == TRUE, UpdateProductStockAsync FROM PRODUCT
+                //GetProductAvailableAsync FROM PRODUCT-->idProduct: 8
+                _response.IsSuccess = await _orderRepository.AddSell(sell);
+                //IF IsSuccess == TRUE, UpdateProductStockAsync FROM PRODUCT-->amount,idProduct
                 _response.DisplayMessage = _response.IsSuccess ? "Sell have been saved" : "Sell can't be saved";
             }
             catch (Exception ex)

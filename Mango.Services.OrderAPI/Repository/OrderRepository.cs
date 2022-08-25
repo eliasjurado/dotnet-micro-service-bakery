@@ -1,9 +1,6 @@
 ﻿using Mango.Services.OrderAPI.DbContexts;
 using Mango.Services.OrderAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mango.Services.OrderAPI.Repository
@@ -34,6 +31,14 @@ namespace Mango.Services.OrderAPI.Repository
                 orderHeaderFromDb.PaymentStatus = paid;
                 await _db.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> AddSell(SellHeader sellHeader)
+        {
+            await using var _db = new ApplicationDbContext(_dbContext);
+            _db.SellHeaders.Add(sellHeader);
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }
