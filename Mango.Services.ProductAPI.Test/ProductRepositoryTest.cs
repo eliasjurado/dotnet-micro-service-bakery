@@ -1,119 +1,87 @@
-using AutoMapper;
 using Mango.Services.ProductAPI.DbContexts;
 using Mango.Services.ProductAPI.Models;
+using Mango.Services.ProductAPI.Models.Dtos;
 using Mango.Services.ProductAPI.Repository;
 using Mango.Services.ProductAPI.Test.DataAttributes;
 using Mango.Services.ProductAPI.Test.Fixtures;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Mango.Services.ProductAPI.Test
 {
     public class ProductRepositoryTest : IClassFixture<ProductRepositoryFixture>
     {
-        public readonly ITestOutputHelper _testOutputHelper;
         public readonly ProductRepositoryFixture _fixture;
-        public readonly IMapper _mapper;
 
-        public ProductRepositoryTest(IMapper mapper, ITestOutputHelper testOutputHelper, ProductRepositoryFixture fixture)
+        public ProductRepositoryTest(ProductRepositoryFixture fixture)
         {
-            _testOutputHelper = testOutputHelper;
             _fixture = fixture;
-            _mapper = mapper;
+        }
+        [Fact]
+        public void ProductRepository_ReturnsInstance()
+        {
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                var result = new ProductRepository(context, _fixture.mapper);
+                Assert.IsType<ProductRepository>(result);
+            }
         }
 
         [Theory]
-        [AvailableButterStockData]
-        public void AvailableButterStock_IsEnoughButter(Product data, float value, bool expected)
+        [ProductUpsertData]
+        public async void CreateUpdateProduct_IsOrNotCreated(ProductDto data, int resultId, bool expected)
         {
-            _testOutputHelper.WriteLine($"AvailableButterStock_IsEnoughButter - {DateTime.Now}");
-            var mockContext = new ApplicationDbContext(_fixture.mockOptions);
-            mockContext.Products.Add(data);
-            mockContext.SaveChanges();
-            var mockRepository = new ProductRepository(mockContext, _mapper);
-
-            var result = mockRepository.AvailableButterStock(value);
-            mockContext.Products.RemoveRange(mockContext.Products);
-            mockContext.SaveChanges();
-
-            Assert.Equal(expected, result);
-        }
-
-
-
-
-        [Theory]
-        [AvailableFlourStockData]
-        public void AvailableFlourStock_IsEnoughFlour(Product data, float value, bool expected)
-        {
-            _testOutputHelper.WriteLine($"AvailableFlourStock_IsEnoughFlour - {DateTime.Now}");
-            var mockContext = new ApplicationDbContext(_fixture.mockOptions);
-            mockContext.Products.Add(data);
-            mockContext.SaveChanges();
-            var mockRepository = new ProductRepository(mockContext, _mapper);
-
-            var result = mockRepository.AvailableFlourStock(value);
-            mockContext.Products.RemoveRange(mockContext.Products);
-            mockContext.SaveChanges();
-
-            Assert.Equal(expected, result);
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                var mockRepository = new ProductRepository(context, _fixture.mapper);
+                var response = await mockRepository.CreateUpdateProduct(data);
+                var result = response.ProductId == resultId;
+                Assert.Equal(expected, result);
+            }
         }
 
         [Theory]
-        [ConsumingInventoryDataAttribute]
-        public async Task ConsumingInventoryAsync_RemovesStockFromFlourAndButter(Product butter, Product flour, float projectedFlour, float projectedButter, int expectedFlourBalance, int expectedButterBalance)
+        [ProductDeleteData]
+        public async void DeleteProduct_IsOrNotDeleted(Product data, int resultId, bool expected)
         {
-            _testOutputHelper.WriteLine($"ConsumingInventoryAsync_RemovesStockFromFlourAndButter - {DateTime.Now}");
-            var mockContext = new ApplicationDbContext(_fixture.mockOptions);
-
-            mockContext.Products.AddRange(butter);
-            mockContext.Products.Add(flour);
-            mockContext.SaveChanges();
-
-            var mockRepository = new ProductRepository(mockContext, _mapper);
-
-            await mockRepository.ConsumingInventoryAsync(projectedFlour, projectedButter, _fixture.cancellationTokenSource.Token);
-            var resultButterBalance = mockContext.Products.Find(butter.ProductId).Stock;
-            var resultFlourBalance = mockContext.Products.Find(flour.ProductId).Stock;
-            mockContext.Products.RemoveRange(mockContext.Products);
-            mockContext.SaveChanges();
-
-            Assert.Equal(expectedButterBalance, resultButterBalance);
-            Assert.Equal(expectedFlourBalance, resultFlourBalance);
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                context.Products.Add(data);
+                context.SaveChanges();
+                var repository = new ProductRepository(context, _fixture.mapper);
+                var response = await repository.DeleteProduct(resultId);
+                Assert.Equal(expected, response);
+            }
         }
 
-        // [Theory]
-        // public async Task RegisterProductionAsync(float amount, DateTime expirationDate)
-        // {
-        //     var mockOptions = new DbContextOptionsBuilder<BakeryDbContext>()
-        //        .UseInMemoryDatabase(databaseName: "BakeryDB")
-        //        .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-        //        .Options;
-        //     var mockContext = new BakeryDbContext(mockOptions);
+        [Theory]
+        [ProductGetData]
+        public async void GetProductById_ReturnProduct(Product data, int value, bool expected)
+        {
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                context.Products.Add(data);
+                context.SaveChanges();
+                var mockRepository = new ProductRepository(context, _fixture.mapper);
+                var response = await mockRepository.GetProductById(value);
+                var assertion = response.ProductId == value;
+                Assert.Equal(expected, assertion);
+            }
+        }
 
-        //     var butterExists = mockContext.Product.Find(butter.Id);
-        //     if (butterExists == null)
-        //     {
-        //         mockContext.Product.Add(butter);
-        //     }
-        //     mockContext.SaveChanges();
+        [Theory]
+        [ProductGetAllData]
+        public async void GetProducts_ReturnProductList(List<Product> data, bool expected)
+        {
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                context.Products.AddRange(data);
+                context.SaveChanges();
+                var repository = new ProductRepository(context, _fixture.mapper);
+                var response = await repository.GetProducts();
+                var assertion = response.Count() > 0;
 
-        //     var flourExists = mockContext.Product.Find(flour.Id);
-        //     if (flourExists == null)
-        //     {
-        //         mockContext.Product.Add(flour);
-        //     }
-        //     mockContext.SaveChanges();
-
-        //     var mockRepository = new BakeryRepository(mockContext);
-        //     var cancellationTokenSource = new CancellationTokenSource(1000);
-
-        //     await mockRepository.ConsumingInventoryAsync(projectedFlour, projectedButter, cancellationTokenSource.Token);
-        //     var resultButterBalance = mockContext.Product.Find(3).Stock;
-        //     var resultFlourBalance = mockContext.Product.Find(2).Stock;
-
-        //     Assert.Equal(expectedButterBalance, resultButterBalance);
-        //     Assert.Equal(expectedFlourBalance, resultFlourBalance);
-        // }
+                Assert.Equal(expected, assertion);
+            }
+        }
     }
 }
