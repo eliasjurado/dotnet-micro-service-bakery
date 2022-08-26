@@ -8,7 +8,7 @@ namespace Mango.Services.OrderAPI.Models
     public class SellHeader
     {        
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        //[DatabaseGeneratedAttribute(DatabaseGeneratedOption.None)]
         public int IdSellHeader { get; set; }
 
         public string UserId { get; set; }
