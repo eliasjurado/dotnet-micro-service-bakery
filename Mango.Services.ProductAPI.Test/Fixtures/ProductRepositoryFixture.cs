@@ -4,12 +4,13 @@ using Mango.Services.ProductAPI.Models;
 using Mango.Services.ProductAPI.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Mango.Services.ProductAPI.Test.Fixtures
 {
     public class ProductRepositoryFixture : IDisposable
     {
-        public static string dbName = "dbProduct";
+        public string dbName = "dbProduct";
 
         public IMapper mapper = new MapperConfiguration(config =>
         {
@@ -19,16 +20,23 @@ namespace Mango.Services.ProductAPI.Test.Fixtures
             config.CreateMap<ProcessProduct, ProcessProductDto>();
         }).CreateMapper();
 
-        public DbContextOptions<ApplicationDbContext> mockOptions => new DbContextOptionsBuilder<ApplicationDbContext>()
+        public DbContextOptions<ApplicationDbContext> CreateNewContextOptions()
+        {
+            var serviceProvider = new ServiceCollection()
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
+
+            var mockOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: dbName)
+            .UseInternalServiceProvider(serviceProvider)
             .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        public ApplicationDbContext dbContext => new ApplicationDbContext(mockOptions);
+            return mockOptions;
+        }
 
         public void Dispose()
         {
-            dbContext.Dispose();
         }
     }
 }

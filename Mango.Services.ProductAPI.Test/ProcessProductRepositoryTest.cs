@@ -21,47 +21,43 @@ namespace ProductAPI.Test
         [ProcessProductStockData]
         public async void GetProductAvailableAsync_ReturnsQuantity(Product data, int arg, int result, bool expected)
         {
-            var mockContext = new ApplicationDbContext(_fixture.mockOptions);
-            mockContext.Products.Add(data);
-            mockContext.SaveChanges();
-            var mockRepository = new ProductRepository(mockContext, _fixture.mapper);
-
-            var response = await mockRepository.GetProductAvailableAsync(arg);
-            var assertion = response == result;
-
-            Assert.Equal(expected, assertion);
-            //mockContext.Products.RemoveRange();
-            //mockContext.SaveChanges();
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                context.Products.Add(data);
+                context.SaveChanges();
+                var repository = new ProductRepository(context, _fixture.mapper);
+                var response = await repository.GetProductAvailableAsync(arg);
+                var assertion = response == result;
+                Assert.Equal(expected, assertion);
+            }
         }
 
         [Theory]
         [ProcessProductRegisterData]
         public async void RegisterBreadProductionAsync_IsOrNotCreated(ProcessProductDto data, bool expected)
         {
-            var mockRepository = new ProductRepository(_fixture.dbContext, _fixture.mapper);
-
-            var response = await mockRepository.RegisterBreadProductionAsync(data);
-            var result = response.Stock == data.Stock;
-
-            Assert.Equal(expected, result);
-
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                var repository = new ProductRepository(context, _fixture.mapper);
+                var response = await repository.RegisterBreadProductionAsync(data);
+                var result = response.Stock == data.Stock;
+                Assert.Equal(expected, result);
+            }
         }
 
-        //[Theory]
-        //[ProcessProductUpdateData]
-        //public async void UpdateProductStockAsync_IsWellUpdated(Product data, double quantity, int IdProduct, double testBalance, bool expected)
-        //{
-        //    var mockContext = new ApplicationDbContext(_fixture.mockOptions);
-        //    mockContext.Products.Add(data);
-        //    mockContext.SaveChanges();
-        //    var mockRepository = new ProductRepository(mockContext, _fixture.mapper);
-
-        //    var response = await mockRepository.UpdateProductStockAsync(quantity, IdProduct);
-        //    var result = response.Stock == testBalance;
-        //    //mockContext.Products.RemoveRange();
-        //    //mockContext.SaveChanges();
-
-        //    Assert.Equal(expected, result);
-        //}
+        [Theory]
+        [ProcessProductUpdateData]
+        public async void UpdateProductStockAsync_IsWellUpdated(Product data, double quantity, int IdProduct, double testBalance, bool expected)
+        {
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                context.Products.Add(data);
+                context.SaveChanges();
+                var repository = new ProductRepository(context, _fixture.mapper);
+                var response = await repository.UpdateProductStockAsync(quantity, IdProduct);
+                var result = response.Stock == testBalance;
+                Assert.Equal(expected, result);
+            }
+        }
     }
 }

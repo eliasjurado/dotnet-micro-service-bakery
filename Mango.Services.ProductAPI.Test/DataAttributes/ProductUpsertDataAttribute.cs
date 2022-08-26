@@ -29,7 +29,7 @@ namespace Mango.Services.ProductAPI.Test.DataAttributes
                 Description = "Bread is a food consisting of flour or meal that is moistened, kneaded into dough, and often fermented using yeast, and it has been a major sustenance since prehistoric times.",
                 ImageUrl = "https://dojoblob.blob.core.windows.net/store/bread.jpg",
                 CategoryName = "Food" } ,
-                2,
+                1,
                 true
             };
             yield return new object[] {
@@ -40,8 +40,8 @@ namespace Mango.Services.ProductAPI.Test.DataAttributes
                 Description = "Bread is a food consisting of flour or meal that is moistened, kneaded into dough, and often fermented using yeast, and it has been a major sustenance since prehistoric times.",
                 ImageUrl = "https://dojoblob.blob.core.windows.net/store/bread.jpg",
                 CategoryName = "Food" } ,
-                3,
-                true
+                2,
+                false
             };
 
         }
