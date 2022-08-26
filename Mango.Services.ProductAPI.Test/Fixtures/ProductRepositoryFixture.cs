@@ -30,6 +30,7 @@ namespace Mango.Services.ProductAPI.Test.Fixtures
             .UseInMemoryDatabase(databaseName: dbName)
             .UseInternalServiceProvider(serviceProvider)
             .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+            .EnableSensitiveDataLogging()
             .Options;
 
             return mockOptions;

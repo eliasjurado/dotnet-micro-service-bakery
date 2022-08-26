@@ -16,6 +16,15 @@ namespace Mango.Services.ProductAPI.Test
         {
             _fixture = fixture;
         }
+        [Fact]
+        public void ProductRepository_ReturnsInstance()
+        {
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                var result = new ProductRepository(context, _fixture.mapper);
+                Assert.IsType<ProductRepository>(result);
+            }
+        }
 
         [Theory]
         [ProductUpsertData]
@@ -61,11 +70,11 @@ namespace Mango.Services.ProductAPI.Test
 
         [Theory]
         [ProductGetAllData]
-        public async void GetProducts_ReturnProductList(Product data, bool expected)
+        public async void GetProducts_ReturnProductList(List<Product> data, bool expected)
         {
             using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
             {
-                context.Products.Add(data);
+                context.Products.AddRange(data);
                 context.SaveChanges();
                 var repository = new ProductRepository(context, _fixture.mapper);
                 var response = await repository.GetProducts();
