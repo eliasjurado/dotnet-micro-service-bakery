@@ -1,4 +1,5 @@
 ﻿using Mango.Services.OrderAPI.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Mango.Services.OrderAPI.Repository
@@ -10,5 +11,7 @@ namespace Mango.Services.OrderAPI.Repository
         Task UpdateOrderPaymentStatus(int orderHeaderId, bool paid);
 
         Task<bool> AddSell(SellHeader sellHeader);
+
+        Task<IEnumerable<SellInformation>> GetSellsAsync();
     }
 }

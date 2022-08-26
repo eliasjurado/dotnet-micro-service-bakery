@@ -23,8 +23,7 @@ namespace Mango.Services.OrderAPI.Controllers
             _productService = productService;
         }
 
-        [HttpPost]
-        //[Authorize]
+        [HttpPost]        
         [Route("RegisterSell")]
         public async Task<object> RegisterSellAsync([FromBody] SellHeader sell)
         {
@@ -53,6 +52,25 @@ namespace Mango.Services.OrderAPI.Controllers
                 {
                     _response.DisplayMessage = "Out of stock";
                 }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages
+                     = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
+
+        [HttpGet]
+        [Route("ShowSells")]
+        public async Task<object> GetAsync()
+        {
+            try
+            {
+                _response.IsSuccess = true;
+                _response.Result = await _orderRepository.GetSellsAsync();
+                _response.DisplayMessage = "Sucessfull";
             }
             catch (Exception ex)
             {
