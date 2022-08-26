@@ -64,6 +64,46 @@ namespace Mango.Services.ProductAPI.Test
             }
         }
 
+        [Theory]
+        [ProductInsertData]
+        public async void Post_ReturnsInsertedProduct(ProductDto expected)
+        {
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                var repository = new ProductRepository(context, _fixture.mapper);
+                var controller = new ProductAPIController(repository);
+
+                var response = await controller.Post(expected);
+                var updated = (ProductDto)((ResponseDto)response).Result;
+
+                Assert.Equal(expected.Name, updated.Name);
+                Assert.Equal(expected.Price, updated.Price);
+                Assert.Equal(expected.Stock, updated.Stock);
+                Assert.Equal(expected.Description, updated.Description);
+                Assert.Equal(expected.CategoryName, updated.CategoryName);
+                Assert.Equal(expected.ImageUrl, updated.ImageUrl);
+            }
+        }
+
+        [Theory]
+        [ProductDeleteData]
+        public async void Delete_ReturnsInsertedProduct(Product data, int arg, bool expected)
+        {
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                context.Products.Add(data);
+                context.SaveChanges();
+                var repository = new ProductRepository(context, _fixture.mapper);
+                var controller = new ProductAPIController(repository);
+
+                var response = await controller.Delete(arg);
+                var deleted = (ResponseDto)response;
+                var assertion = deleted.IsSuccess == expected;
+
+                Assert.Equal(expected, assertion);
+            }
+        }
+
         //[Theory]
         //[ProductUpdateData]
         //public async void Put_ReturnsUpdatedProduct(Product data, ProductDto expected)
@@ -87,9 +127,5 @@ namespace Mango.Services.ProductAPI.Test
         //        Assert.NotEqual(expected.ImageUrl, updated.ImageUrl);
         //    }
         //}
-
-        //      public async Task<object> Post([FromBody] ProductDto productDto)
-        //      public async Task<object> Put([FromBody] ProductDto productDto)
-        //      public async Task<object> Delete(int id)
     }
 }
