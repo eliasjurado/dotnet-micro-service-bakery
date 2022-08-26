@@ -17,28 +17,28 @@ namespace Mango.Services.ProductAPI.Test.DataAttributes
                     ProductionDate = DateTime.Now,
                     ExpirationDate = DateTime.Now.AddDays(2),
                 } ,
+                true,
+            };
+            yield return new object[] {
+                new ProcessProductDto {
+                    Id=0,
+                    ProductId = 1,
+                    Stock = 100,
+                    ProductionDate = DateTime.Now,
+                    ExpirationDate = DateTime.Now.AddDays(2),
+                } ,
                 true
             };
-            //yield return new object[] {
-            //    new ProcessProductDto {
-            //        Id=0,
-            //        ProductId = 1,
-            //        Stock = 100,
-            //        ProductionDate = DateTime.Now,
-            //        ExpirationDate = DateTime.Now.AddDays(2),
-            //    } ,
-            //    true
-            //};
-            //yield return new object[] {
-            //    new ProcessProductDto {
-            //        Id=0,
-            //        ProductId = 1,
-            //        Stock = 150,
-            //        ProductionDate = DateTime.Now,
-            //        ExpirationDate = DateTime.Now.AddDays(2),
-            //    } ,
-            //    true
-            //};
+            yield return new object[] {
+                new ProcessProductDto {
+                    Id=0,
+                    ProductId = 1,
+                    Stock = 150,
+                    ProductionDate = DateTime.Now,
+                    ExpirationDate = DateTime.Now.AddDays(2),
+                } ,
+                true
+            };
         }
     }
 }
