@@ -21,8 +21,7 @@ namespace Mango.Services.ProductAPI.Controllers
             this._response = new ResponseDto();
         }
 
-        [HttpPost]
-        //[Authorize]
+        [HttpPost]        
         [Route("RegisterBreadProduction")]
         public async Task<object> RegisterBreadProductionAsync([FromBody] ProcessProductDto processProduct)
         {
@@ -40,8 +39,7 @@ namespace Mango.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [HttpGet]
-        //[Authorize]
+        [HttpGet]        
         [Route("ProductAvailable")]
         public async Task<object> GetProductAvailableAsync(int idProduct)
         {
@@ -58,8 +56,7 @@ namespace Mango.Services.ProductAPI.Controllers
             return _response;
         }
 
-        [HttpGet]
-        //[Authorize]
+        [HttpGet]        
         [Route("UpdateProductStock")]
         public async Task<object> UpdateProductStockAsync(double amount, int idProduct)
         {

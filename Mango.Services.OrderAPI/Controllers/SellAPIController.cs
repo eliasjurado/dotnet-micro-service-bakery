@@ -16,7 +16,6 @@ namespace Mango.Services.OrderAPI.Controllers
         private readonly IOrderRepository _orderRepository;
         private readonly IProductService _productService;
 
-
         public SellAPIController(IOrderRepository productRepository, IProductService productService)
         {
             _orderRepository = productRepository;
@@ -24,15 +23,14 @@ namespace Mango.Services.OrderAPI.Controllers
             _productService = productService;
         }
 
-        [HttpPost]
-        //[Authorize]
+        [HttpPost]        
         [Route("RegisterSell")]
-        public async Task<object> RegisterSellAsync([FromBody] SellHeader sell)        
+        public async Task<object> RegisterSellAsync([FromBody] SellHeader sell)
         {
             try
             {
                 _response.IsSuccess = false;
-                var itemToBuy = (from item in sell.SellDetails select item).FirstOrDefault();                
+                var itemToBuy = (from item in sell.SellDetails select item).FirstOrDefault();
                 var inventory = await _productService.GetProductAvailableAsync<ResponseDto>(itemToBuy.ProductId);
 
                 if (inventory.IsSuccess && (((Int64)inventory.Result) > itemToBuy.Count))
@@ -48,14 +46,12 @@ namespace Mango.Services.OrderAPI.Controllers
                         }
                         else
                             _response.DisplayMessage = "System couldn't update the inventory.";
-
                     }
                 }
                 else
                 {
                     _response.DisplayMessage = "Out of stock";
-                }                
-                
+                }
             }
             catch (Exception ex)
             {
@@ -66,6 +62,23 @@ namespace Mango.Services.OrderAPI.Controllers
             return _response;
         }
 
-       
+        [HttpGet]
+        [Route("ShowSells")]
+        public async Task<object> GetAsync()
+        {
+            try
+            {
+                _response.IsSuccess = true;
+                _response.Result = await _orderRepository.GetSellsAsync();
+                _response.DisplayMessage = "Sucessfull";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages
+                     = new List<string>() { ex.ToString() };
+            }
+            return _response;
+        }
     }
 }
