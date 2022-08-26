@@ -14,6 +14,16 @@ namespace Mango.Services.OrderAPI.Repository
             _dbContext = dbContext;
         }
 
+        public async Task<bool> AddSell(SellHeader sellHeader)
+        {
+            await using var _db = new ApplicationDbContext(_dbContext);
+            _db.SellHeaders.Add(sellHeader);
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
+        #region MyRegion
+
         public async Task<bool> AddOrder(OrderHeader orderHeader)
         {
             await using var _db = new ApplicationDbContext(_dbContext);
@@ -33,20 +43,6 @@ namespace Mango.Services.OrderAPI.Repository
             }
         }
 
-        public async Task<bool> AddSell(SellHeader sellHeader)
-        {
-            try
-            {
-                await using var _db = new ApplicationDbContext(_dbContext);
-                _db.SellHeaders.Add(sellHeader);
-                await _db.SaveChangesAsync();
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-
-                return false;
-            }
-        }
+        #endregion MyRegion
     }
 }

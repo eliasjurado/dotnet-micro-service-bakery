@@ -124,9 +124,12 @@ namespace Mango.Services.OrderAPI.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SellHeaderIdSellHeader")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdSellHeader");
+                    b.HasIndex("SellHeaderIdSellHeader");
 
                     b.ToTable("SellDetails");
                 });
@@ -165,13 +168,9 @@ namespace Mango.Services.OrderAPI.Migrations
 
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.SellDetails", b =>
                 {
-                    b.HasOne("Mango.Services.OrderAPI.Models.SellHeader", "SellHeader")
+                    b.HasOne("Mango.Services.OrderAPI.Models.SellHeader", null)
                         .WithMany("SellDetails")
-                        .HasForeignKey("IdSellHeader")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SellHeader");
+                        .HasForeignKey("SellHeaderIdSellHeader");
                 });
 
             modelBuilder.Entity("Mango.Services.OrderAPI.Models.OrderHeader", b =>
