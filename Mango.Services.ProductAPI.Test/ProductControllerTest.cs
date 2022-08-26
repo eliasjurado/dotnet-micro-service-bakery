@@ -88,6 +88,27 @@ namespace Mango.Services.ProductAPI.Test
         //    }
         //}
 
+        [Theory]
+        [ProductInsertData]
+        public async void Post_ReturnsInsertedProduct(ProductDto expected)
+        {
+            using (var context = new ApplicationDbContext(_fixture.CreateNewContextOptions()))
+            {
+                var repository = new ProductRepository(context, _fixture.mapper);
+                var controller = new ProductAPIController(repository);
+
+                var response = await controller.Post(expected);
+                var updated = (ProductDto)((ResponseDto)response).Result;
+
+                Assert.Equal(expected.Name, updated.Name);
+                Assert.Equal(expected.Price, updated.Price);
+                Assert.Equal(expected.Stock, updated.Stock);
+                Assert.Equal(expected.Description, updated.Description);
+                Assert.Equal(expected.CategoryName, updated.CategoryName);
+                Assert.Equal(expected.ImageUrl, updated.ImageUrl);
+            }
+        }
+
         //      public async Task<object> Post([FromBody] ProductDto productDto)
         //      public async Task<object> Put([FromBody] ProductDto productDto)
         //      public async Task<object> Delete(int id)
